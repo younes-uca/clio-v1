@@ -1,0 +1,86 @@
+
+<p-dialog [(visible)]="viewDialog" [style]="{width: '70vw'}" header="{{'purchaseRequestTabPan' | translate}}" [modal]="true" styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        <p-tabView>
+            <p-tabPanel header="{{'purchaseRequestTabPan' | translate}}">
+                <div class="grid">
+                    <div class="field col-12 md:col-4">
+                        <label for="1">{{'Refrence' | translate}}</label>
+                        <input class="mb-2 mr-2" type="text" pInputText [disabled]="true" placeholder="{{'Refrence' | translate}}" autofocus  id="1" [(ngModel)]="item.refrence">
+                    </div>
+                    <div class="field col-12 md:col-4">
+                        <label for="2">{{'Montant devis' | translate}}</label>
+                        <p-inputNumber class="mb-2 mr-2" id="2" [disabled]="true" placeholder="{{'Montant devis' | translate}}" [(ngModel)]="item.montantDevis"></p-inputNumber>
+                    </div>
+                    <div class="field col-12 md:col-4">
+                        <label for="3">{{'Date purchase request' | translate}}</label>
+                        <p-calendar id="3" [disabled]="true"  [showTime]="true" [showSeconds]="false" placeholder="{{'Date purchase request' | translate}}"  [(ngModel)]="item.datePurchaseRequest" dateFormat="{{dateFormat}}"></p-calendar>
+                    </div>
+                    <div class="field col-12 md:col-4">
+                        <label for="4">{{'Date livraison' | translate}}</label>
+                        <p-calendar id="4" [disabled]="true"  [showTime]="true" [showSeconds]="false" placeholder="{{'Date livraison' | translate}}"  [(ngModel)]="item.dateLivraison" dateFormat="{{dateFormat}}"></p-calendar>
+                    </div>
+                    <div class="field col-12 md:col-4">
+                        <label for="5">{{'Supplier' | translate}}</label>
+                        <p-dropdown [options]="suppliers" [(ngModel)]="item.supplier" id="5" [disabled]="true" optionLabel="reference" placeholder="{{'Supplier' | translate}}"></p-dropdown>
+                    </div>
+                    <div class="field col-12 md:col-4">
+                        <label for="6">{{'Montant achat' | translate}}</label>
+                        <p-inputNumber class="mb-2 mr-2" id="6" [disabled]="true" placeholder="{{'Montant achat' | translate}}" [(ngModel)]="item.montantAchat"></p-inputNumber>
+                    </div>
+                    <div class="field col-12 md:col-4">
+                        <label for="7">{{'Purchase request status' | translate}}</label>
+                        <p-dropdown [options]="purchaseRequestStatuss" [(ngModel)]="item.purchaseRequestStatus" id="7" [disabled]="true" optionLabel="libelle" placeholder="{{'Purchase request status' | translate}}"></p-dropdown>
+                    </div>
+                </div>
+            </p-tabPanel>
+
+            <p-tabPanel header="purchaseRequestPurchaseRequestProducts">
+                <div class="grid">
+                    <div class="col">
+                        <div class="card">
+                            <p-table [value]="item.purchaseRequestProducts" [scrollable]="true" scrollHeight="200px">
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Qantity</th>
+                                        <th>Qantity ordred</th>
+                                        <th>Qantity delivered</th>
+                                        <th>Unite price</th>
+                                        <th>Price</th>
+                                        <th>Description</th>
+                                        <th>Purchase request product status</th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-p>
+                                    <tr>
+                                        <td>{{p.product?.id}}</td>
+                                        <td>{{p.qantity}}</td>
+                                        <td>{{p.qantityOrdred}}</td>
+                                        <td>{{p.qantityDelivered}}</td>
+                                        <td>{{p.unitePrice?.libelle}}</td>
+                                        <td>{{p.price}}</td>
+                                        <td>{{p.description}}</td>
+                                        <td>{{p.purchaseRequestProductStatus?.libelle}}</td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </div>
+                    </div>
+                </div>
+            </p-tabPanel>
+        </p-tabView>
+
+    </ng-template>
+
+    <ng-template pTemplate="footer" >
+        <div class="grid-footer">
+            <div>
+                <button pButton pRipple label="Annuler" icon="pi pi-times" class="p-button-outlined" (click)="hideViewDialog()"></button>
+            </div>
+        </div>
+    </ng-template>
+</p-dialog>
+
+
+

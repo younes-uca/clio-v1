@@ -1,0 +1,179 @@
+        <p-dialog [(visible)]="editDialog" [style]="{width: '70vw'}" header="{{'purchaseRequestTabPan' | translate}}" [modal]="true" styleClass="p-fluid" [maximizable]="true" [draggable]="false" [resizable]="false">
+            <ng-template pTemplate="content" >
+                <p-tabView>
+                    <p-tabPanel header="{{'purchaseRequestTabPan' | translate}}">
+                        <div class="grid">
+
+
+                                        <div class="field col-12 md:col-4">
+                                            <label for="1">{{'purchaseRequestRefrence' | translate}}<span style="color: red;">*</span></label>
+                                            <input   appendTo="body" class="mb-2 mr-2" type="text" pInputText placeholder="{{'purchaseRequestRefrence' | translate}}" id="1" [(ngModel)]="item.refrence"
+                                                    [ngClass]="{'ng-invalid ng-dirty' : !validPurchaseRequestRefrence}"  />
+                                            <small class='p-error' *ngIf='!validPurchaseRequestRefrence'>Refrence est obligatoire.</small>
+                                        </div>
+
+                                        <div class="field col-12 md:col-4">
+                                            <label for="2">{{'purchaseRequestMontantDevis' | translate}}</label>
+                                            <p-inputNumber  appendTo="body" class="mb-2 mr-2" id="2"
+                                                           placeholder="{{'purchaseRequestMontantDevis' | translate}}" [(ngModel)]="item.montantDevis"  >
+                                            </p-inputNumber>
+                                            
+                                        </div>
+
+                                        <div class="field col-12 md:col-4">
+                                            <label for="3">{{'purchaseRequestDatePurchaseRequest' | translate}}</label>
+                                            <p-calendar appendTo="body" id="3"   [showTime]="true" [showSeconds]="false" placeholder="{{'purchaseRequestDatePurchaseRequest' | translate}}"  [(ngModel)]="item.datePurchaseRequest"
+                                                      >
+                                            </p-calendar>
+                                            
+                                        </div>
+
+                                        <div class="field col-12 md:col-4">
+                                            <label for="4">{{'purchaseRequestDateLivraison' | translate}}</label>
+                                            <p-calendar appendTo="body" id="4"   [showTime]="true" [showSeconds]="false" placeholder="{{'purchaseRequestDateLivraison' | translate}}"  [(ngModel)]="item.dateLivraison"
+                                                      >
+                                            </p-calendar>
+                                            
+                                        </div>
+
+                                    <div class="field col-11 md:col-3">
+                                            <label for="5">{{'purchaseRequestSupplier' | translate}}</label>
+                                            <p-dropdown   appendTo="body" [options]="suppliers" [(ngModel)]="item.supplier" id="5"[filter]="true" filterMatchMode="contains"
+                                                    [showClear]="true" optionLabel="reference" placeholder="{{'purchaseRequestSupplier' | translate}}"  >
+                                            </p-dropdown>
+                                            
+                                        </div>
+
+                                        <div class="field col-12 md:col-4">
+                                            <label for="6">{{'purchaseRequestMontantAchat' | translate}}</label>
+                                            <p-inputNumber  appendTo="body" class="mb-2 mr-2" id="6"
+                                                           placeholder="{{'purchaseRequestMontantAchat' | translate}}" [(ngModel)]="item.montantAchat"  >
+                                            </p-inputNumber>
+                                            
+                                        </div>
+
+                                    <div class="field col-11 md:col-3">
+                                            <label for="7">{{'purchaseRequestPurchaseRequestStatus' | translate}}</label>
+                                            <p-dropdown   appendTo="body" [options]="purchaseRequestStatuss" [(ngModel)]="item.purchaseRequestStatus" id="7"[filter]="true" filterMatchMode="contains"
+                                                    [showClear]="true" optionLabel="libelle" placeholder="{{'purchaseRequestPurchaseRequestStatus' | translate}}"  >
+                                            </p-dropdown>
+                                            
+                                        </div>
+
+                        </div>
+                    </p-tabPanel>
+
+                            <p-tabPanel header="purchaseRequestPurchaseRequestProducts">
+                                <p-tabView [(activeIndex)]="activeTab">
+                                    <p-tabPanel header="Création">
+                                        <div class="grid">
+                                                            <div class="field col-11 md:col-3">
+                                                                <label>Product</label>
+                                                                <p-dropdown appendTo="body" [options]="products" [(ngModel)]="purchaseRequestProductsElement.product"
+                                                                        id="1"  [filter]="true" filterMatchMode="contains" [showClear]="true"
+                                                                        optionLabel="id" placeholder="Product"  >
+                                                                </p-dropdown>
+                                                                
+                                                            </div>
+                                                            <div class="field col-12 md:col-4">
+                                                                <label for="3">Qantity</label>
+                                                                <p-inputNumber  appendTo="body" class="mb-2 mr-2" id="qantity" [(ngModel)]="purchaseRequestProductsElement.qantity" placeholder="Qantity"  ></p-inputNumber>
+                                                                
+                                                            </div>
+                                                            <div class="field col-12 md:col-4">
+                                                                <label for="4">Qantity ordred</label>
+                                                                <p-inputNumber  appendTo="body" class="mb-2 mr-2" id="qantityOrdred" [(ngModel)]="purchaseRequestProductsElement.qantityOrdred" placeholder="Qantity ordred"  ></p-inputNumber>
+                                                                
+                                                            </div>
+                                                            <div class="field col-12 md:col-4">
+                                                                <label for="5">Qantity delivered</label>
+                                                                <p-inputNumber  appendTo="body" class="mb-2 mr-2" id="qantityDelivered" [(ngModel)]="purchaseRequestProductsElement.qantityDelivered" placeholder="Qantity delivered"  ></p-inputNumber>
+                                                                
+                                                            </div>
+                                                            <div class="field col-11 md:col-3">
+                                                                <label>Unite price</label>
+                                                                <p-dropdown appendTo="body" [options]="unitePrices" [(ngModel)]="purchaseRequestProductsElement.unitePrice"
+                                                                        id="6"  [filter]="true" filterMatchMode="contains" [showClear]="true"
+                                                                        optionLabel="libelle" placeholder="Unite price"  >
+                                                                </p-dropdown>
+                                                                
+                                                            </div>
+                                                            <div class="field col-12 md:col-4">
+                                                                <label for="7">Price</label>
+                                                                <p-inputNumber  appendTo="body" class="mb-2 mr-2" id="price" [(ngModel)]="purchaseRequestProductsElement.price" placeholder="Price"  ></p-inputNumber>
+                                                                
+                                                            </div>
+                                                            <div class="field col-12 md:col-4">
+                                                                <label for="8">Description</label>
+                                                                <input appendTo="body" class="mb-2 mr-2" type="text" pInputText placeholder="Description"
+                                                                       id="8" [(ngModel)]="purchaseRequestProductsElement.description"
+                                                                       autofocus   >
+                                                                
+                                                            </div>
+                                                            <div class="field col-11 md:col-3">
+                                                                <label>Purchase request product status</label>
+                                                                <p-dropdown appendTo="body" [options]="purchaseRequestProductStatuss" [(ngModel)]="purchaseRequestProductsElement.purchaseRequestProductStatus"
+                                                                        id="9"  [filter]="true" filterMatchMode="contains" [showClear]="true"
+                                                                        optionLabel="libelle" placeholder="Purchase request product status"  >
+                                                                </p-dropdown>
+                                                                
+                                                            </div>
+                                                <div class="field col-12 md:col-1">
+                                                    <button pButton pRipple type="button" icon="pi pi-plus" class="mt-4" label="OK" (click)="addPurchaseRequestProducts()"></button>
+                                                </div>
+                                        </div>
+                                    </p-tabPanel>
+                                    <p-tabPanel header="Liste {{item.purchaseRequestProducts?.length > 0 ? '(' + item.purchaseRequestProducts?.length + ')' : ''}}">
+                                            <div class="card">
+                                                <p-table [value]="item.purchaseRequestProducts" [scrollable]="true" scrollHeight="200px">
+                                                    <ng-template pTemplate="header">
+                                                        <tr>
+                                                                        <th>Product</th>
+                                                                        <th>Qantity</th>
+                                                                        <th>Qantity ordred</th>
+                                                                        <th>Qantity delivered</th>
+                                                                        <th>Unite price</th>
+                                                                        <th>Price</th>
+                                                                        <th>Description</th>
+                                                                        <th>Purchase request product status</th>
+                                                            <th>Actions</th>
+                                                        </tr>
+                                                    </ng-template>
+                                                    <ng-template pTemplate="body" let-p>
+                                                        <tr>
+                                                                    <td>{{p.product?.id}}</td>
+                                                                        <td>{{p.qantity}}</td>
+                                                                        <td>{{p.qantityOrdred}}</td>
+                                                                        <td>{{p.qantityDelivered}}</td>
+                                                                    <td>{{p.unitePrice?.libelle}}</td>
+                                                                        <td>{{p.price}}</td>
+                                                                        <td>{{p.description}}</td>
+                                                                    <td>{{p.purchaseRequestProductStatus?.libelle}}</td>
+                                                            <td>
+                                                                <button (click)="deletePurchaseRequestProduct(p)" pButton type="button" icon="pi pi-times"  class="p-button-rounded p-button-danger"></button>
+                                                                <button (click)="editPurchaseRequestProduct(p)" pButton type="button" icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2"></button>
+                                                            </td>
+                                                        </tr>
+                                                    </ng-template>
+                                                </p-table>
+                                            </div>
+                                    </p-tabPanel>
+                                </p-tabView>
+                            </p-tabPanel>
+                </p-tabView>
+            </ng-template>
+
+            <ng-template pTemplate="footer" >
+                <div class="grid-footer">
+                        <div>
+                            <button pButton pRipple label="Annuler" icon="pi pi-times" class="p-button-outlined" (click)="hideEditDialog()"></button>
+                        </div>
+                    <div>
+                        <button pButton pRipple label="Valider" icon="pi pi-check" style="margin:10px" (click)="edit()"></button>
+                    </div>
+                </div>
+            </ng-template>
+
+
+
+    </p-dialog>

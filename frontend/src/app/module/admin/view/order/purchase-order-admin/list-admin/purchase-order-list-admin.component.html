@@ -1,0 +1,272 @@
+<div class="grid">
+    <div class="col-12">
+        <p-toast></p-toast>
+        <div class="card">
+            <p-toolbar styleClass="mb-4">
+                <ng-template pTemplate="left">
+                                        <button pButton pRipple label=" {{'new' | translate}}" icon="pi pi-plus" class="p-button-success mr-2 mb-2" (click)="openCreate('PurchaseOrder')"></button>
+                    <button [disabled]="isSelectionDisabled()" pButton pRipple label=" {{'delete' | translate}}" icon="pi pi-trash" class="p-button-danger mr-2 mb-2" (click)=deleteMultiple()></button>
+                    <button pButton pRipple label=" {{'search' | translate}}" icon="pi pi-{{findByCriteriaShow?'angle-down':'angle-right'}}" class="p-button-warning mr-2 mb-2" (click)="this.showSearch()"></button>
+                </ng-template>
+                <ng-template pTemplate="right">
+                    <div class="flex">
+                        <p-splitButton label=" {{'export' | translate}}" icon="pi pi-download" styleClass="p-button-help" [model]="excelPdfButons"></p-splitButton>
+                    </div>
+                </ng-template>
+
+            </p-toolbar>
+            <p-toolbar *ngIf="findByCriteriaShow">
+
+                <div class="align-form-search">
+                        <span class=" p-float-label mr-3 align-search-items mt-4">
+                            <input class="mr-2" pInputText id="1" type="text"  [(ngModel)]="criteria.refrenceLike">
+                            <label for="1">{{'Refrence' | translate}}</label>
+                        </span>
+                        <span class=" p-float-label mr-3 align-search-items mt-4">
+                            <p-dropdown [options]="orderSupplierTypes" [(ngModel)]="criteria.orderSupplierType" id="2" [filter]="true"
+                                        [showClear]="true"  placeholder="{{'Order supplier type' | translate}}" optionLabel="libelle">
+                            </p-dropdown>
+                        </span>
+
+                        <span class=" p-float-label mr-3 align-search-items mt-4">
+                            <p-calendar class="mr-2" [(ngModel)]="criteria.dateOrderSupplierFrom"
+                                    id="3-1"
+                                    dateFormat="dd-MM-yy"></p-calendar>
+                            <label for="3-1">{{'Date order supplier' | translate}} Min</label>
+                        </span>
+
+                         <span class=" p-float-label mr-3 align-search-items mt-4">
+                            <p-calendar class="mr-2" [(ngModel)]="criteria.dateOrderSupplierTo"
+                                    id="3-2"
+                                    dateFormat="dd-MM-yy"></p-calendar>
+                            <label for="3-2">{{'Date order supplier' | translate}} Max</label>
+                        </span>
+
+                        <span class=" p-float-label mr-3 align-search-items mt-4">
+                            <p-dropdown [options]="criticalitys" [(ngModel)]="criteria.criticality" id="4" [filter]="true"
+                                        [showClear]="true"  placeholder="{{'Criticality' | translate}}" optionLabel="libelle">
+                            </p-dropdown>
+                        </span>
+                        <span class=" p-float-label mr-3 align-search-items mt-4">
+                            <p-dropdown [options]="suppliers" [(ngModel)]="criteria.supplier" id="5" [filter]="true"
+                                        [showClear]="true"  placeholder="{{'Supplier' | translate}}" optionLabel="reference">
+                            </p-dropdown>
+                        </span>
+                        <span class=" p-float-label mr-3 align-search-items mt-4">
+                            <p-dropdown [options]="recipients" [(ngModel)]="criteria.recipient" id="6" [filter]="true"
+                                        [showClear]="true"  placeholder="{{'Recipient' | translate}}" optionLabel="libelle">
+                            </p-dropdown>
+                        </span>
+                        <span class=" p-float-label mr-3 align-search-items mt-4">
+                            <p-dropdown [options]="purchasers" [(ngModel)]="criteria.purchaser" id="7" [filter]="true"
+                                        [showClear]="true"  placeholder="{{'Purchaser' | translate}}" optionLabel="libelle">
+                            </p-dropdown>
+                        </span>
+                        <span class=" p-float-label mr-3 align-search-items mt-4">
+                            <p-inputNumber class="mr-2" mode="decimal" [(ngModel)]="criteria.totalMin" id="8-1"></p-inputNumber>
+                            <label for="8-1">{{'Total' | translate}} Min</label>
+                        </span>
+                       <span class=" p-float-label mr-3 align-search-items mt-4">
+                            <p-inputNumber class="mr-2" mode="decimal" [(ngModel)]="criteria.totalMax" id="8-2"></p-inputNumber>
+                            <label for="8-2">{{'Total' | translate}} Max</label>
+                       </span>
+                        <span class=" p-float-label mr-3 align-search-items mt-4">
+                            <input class="mr-2" pInputText id="9" type="text"  [(ngModel)]="criteria.descriptionLike">
+                            <label for="9">{{'Description' | translate}}</label>
+                        </span>
+                        <span class=" p-float-label mr-3 align-search-items mt-4">
+                            <p-dropdown [options]="currencys" [(ngModel)]="criteria.currency" id="10" [filter]="true"
+                                        [showClear]="true"  placeholder="{{'Currency' | translate}}" optionLabel="libelle">
+                            </p-dropdown>
+                        </span>
+                        <span class=" p-float-label mr-3 align-search-items mt-4">
+                            <p-dropdown [options]="purchaseOrderStatuss" [(ngModel)]="criteria.purchaseOrderStatus" id="11" [filter]="true"
+                                        [showClear]="true"  placeholder="{{'Purchase order status' | translate}}" optionLabel="libelle">
+                            </p-dropdown>
+                        </span>
+                        <span class=" p-float-label mr-3 align-search-items mt-4">
+                            <p-dropdown [options]="purchaseRequests" [(ngModel)]="criteria.purchaseRequest" id="12" [filter]="true"
+                                        [showClear]="true"  placeholder="{{'Purchase request' | translate}}" optionLabel="refrence">
+                            </p-dropdown>
+                        </span>
+                </div>
+
+                <div class="align-search-button">
+                    <button pButton pRipple label="{{'validate' | translate}}" icon="pi pi-sort-amount-down" class="p-button-info mr-2" (click)="findPaginatedByCriteria()"></button>
+                </div>
+            </p-toolbar>
+
+
+            <p-table #dt [value]="items" [columns]="cols" [rows]="8" [paginator]="false"
+                    [globalFilterFields]="['refrence', 'orderSupplierTypelibelle', 'dateOrderSupplier', 'criticalitylibelle', 'supplierreference', 'recipientlibelle', 'purchaserlibelle', 'total', 'currencylibelle', 'purchaseOrderStatuslibelle', 'purchaseRequestrefrence']" [(selection)]="selections"
+                    [rowHover]="true" dataKey="id" styleClass="p-datatable-customers"
+                    currentPageReportTemplate="{{'Les éléments de {first} à {last} sur {totalRecords} ' | translate}}"
+                    [showCurrentPageReport]="true" [rowsPerPageOptions]="[10,25,50]" selectionMode="multiple">
+                <ng-template pTemplate="caption">
+                    <div class="flex flex-column flex-row justify-content-between table-header">
+                        <h5 class="p-m-0">{{'purchaseOrderHeader' | translate}}</h5>
+                        <span class="p-input-icon-left ml-auto">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" placeholder="{{'searchInput' | translate}}" (input)="dt.filterGlobal($event.target.value, 'contains')"/>
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 3rem">
+                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                        </th>
+                                
+                        <th pSortableColumn="refrence">
+                            <div class="p-d-flex p-jc-between p-ai-center">
+                                <span>{{'Refrence' | translate}}</span>
+                                <p-sortIcon field="refrence"></p-sortIcon>
+                                <p-columnFilter type="text" field="element.refrence" display="menu" class="ml-auto"></p-columnFilter>
+                            </div>
+                        </th>
+                                
+                                
+                        <th pSortableColumn="orderSupplierType">
+                            <div class="p-d-flex p-jc-between p-ai-center">
+                                <span>{{'Order supplier type' | translate}}</span>
+                                <p-sortIcon field="orderSupplierType"></p-sortIcon>
+                            </div>
+                        </th>
+                                
+                                
+                        <th pSortableColumn="dateOrderSupplier">
+                            <div class="p-d-flex p-jc-between p-ai-center">
+                                <span>{{'Date order supplier' | translate}}</span>
+                                <p-sortIcon field="dateOrderSupplier"></p-sortIcon>
+                            </div>
+                        </th>
+                                
+                                
+                        <th pSortableColumn="criticality">
+                            <div class="p-d-flex p-jc-between p-ai-center">
+                                <span>{{'Criticality' | translate}}</span>
+                                <p-sortIcon field="criticality"></p-sortIcon>
+                            </div>
+                        </th>
+                                
+                                
+                        <th pSortableColumn="supplier">
+                            <div class="p-d-flex p-jc-between p-ai-center">
+                                <span>{{'Supplier' | translate}}</span>
+                                <p-sortIcon field="supplier"></p-sortIcon>
+                            </div>
+                        </th>
+                                
+                                
+                        <th pSortableColumn="recipient">
+                            <div class="p-d-flex p-jc-between p-ai-center">
+                                <span>{{'Recipient' | translate}}</span>
+                                <p-sortIcon field="recipient"></p-sortIcon>
+                            </div>
+                        </th>
+                                
+                                
+                        <th pSortableColumn="purchaser">
+                            <div class="p-d-flex p-jc-between p-ai-center">
+                                <span>{{'Purchaser' | translate}}</span>
+                                <p-sortIcon field="purchaser"></p-sortIcon>
+                            </div>
+                        </th>
+                                
+                                
+                        <th pSortableColumn="total">
+                            <div class="p-d-flex p-jc-between p-ai-center">
+                                <span>{{'Total' | translate}}</span>
+                                <p-sortIcon field="total"></p-sortIcon>
+                            </div>
+                        </th>
+                                
+                                
+                        <th pSortableColumn="currency">
+                            <div class="p-d-flex p-jc-between p-ai-center">
+                                <span>{{'Currency' | translate}}</span>
+                                <p-sortIcon field="currency"></p-sortIcon>
+                            </div>
+                        </th>
+                                
+                                <!-- 
+                        <th pSortableColumn="purchaseOrderStatus">
+                            <div class="p-d-flex p-jc-between p-ai-center">
+                                <span>{{'Purchase order status' | translate}}</span>
+                                <p-sortIcon field="purchaseOrderStatus"></p-sortIcon>
+                            </div>
+                        </th>
+                                --> 
+                                <!-- 
+                        <th pSortableColumn="purchaseRequest">
+                            <div class="p-d-flex p-jc-between p-ai-center">
+                                <span>{{'Purchase request' | translate}}</span>
+                                <p-sortIcon field="purchaseRequest"></p-sortIcon>
+                            </div>
+                        </th>
+                                --> 
+                        <th>Actions</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-element>
+                    <tr>
+                        <td>
+                            <p-tableCheckbox [value]="element"></p-tableCheckbox>
+                        </td>
+                            
+                        <td>{{element.refrence}}</td>
+                            
+                            
+                        <td>{{element.orderSupplierType?.libelle}}</td>
+                            
+                            
+                        <td>{{element.dateOrderSupplier | date :'dd/MM/yyyy HH:mm' }}</td>
+                            
+                            
+                        <td>{{element.criticality?.libelle}}</td>
+                            
+                            
+                        <td>{{element.supplier?.reference}}</td>
+                            
+                            
+                        <td>{{element.recipient?.libelle}}</td>
+                            
+                            
+                        <td>{{element.purchaser?.libelle}}</td>
+                            
+                            
+                        <td>{{element.total}}</td>
+                            
+                            
+                        <td>{{element.currency?.libelle}}</td>
+                            
+                             <!-- 
+                        <td>{{element.purchaseOrderStatus?.libelle}}</td>
+                             --> 
+                             <!-- 
+                        <td>{{element.purchaseRequest?.refrence}}</td>
+                             --> 
+                        <td>
+                            <button pButton pRipple icon="pi pi-pencil"  class="p-button-rounded p-button-success mr-2" (click)="edit(element)"></button>
+                            <button pButton pRipple icon="pi pi-list" class="p-button-rounded p-button-info mr-2" (click)="view(element)"></button>
+                            <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger mr-2" (click)="delete(element)"></button>
+                            <button pButton pRipple icon="pi pi-copy" class="p-button-rounded p-button-raised p-button-warning" (click)="duplicate(element)"></button>
+                        </td>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="summary">
+                    <p-paginator  [rows]="10" [totalRecords]="totalRecords" (onPageChange)="onPage($event)"></p-paginator>
+                    <div class="p-d-flex p-ai-center p-jc-between">
+                        En totale il {{items ? totalRecords == 1 ? 'y a' : 'y a' : 'y a' }} {{items ? totalRecords : 0 }} {{items ? totalRecords == 1 ? 'purchase order' : 'purchase orders' : 0 }}.
+                    </div>
+                </ng-template>
+            </p-table>
+        </div>
+
+        <app-purchase-order-create-admin></app-purchase-order-create-admin>
+        <app-purchase-order-edit-admin></app-purchase-order-edit-admin>
+        <app-purchase-order-view-admin></app-purchase-order-view-admin>
+        <p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
+    </div>
+</div>
